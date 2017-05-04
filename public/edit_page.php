@@ -99,7 +99,7 @@ if (isset($_POST["submit"])) {
 			<a href="manage_content.php">Cancel</a>
 			&nbsp;
 			&nbsp;
-			<a href="delete_page.php?subject=<?php echo urlencode($current_page['id']); ?>" onClick="return confirm('Are you sure?');">Delete Page</a>
+			<a href="delete_page.php?page=<?php echo urlencode($current_page['id']); ?>" onClick="return confirm('Are you sure?');">Delete Page</a>
 		</div>
 	</div>
 

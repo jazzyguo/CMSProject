@@ -1,4 +1,4 @@
-	<div id="footer">Copyright 2017, Guo Gang</div>
+	<div id="footer">Copyright 2017, Guo</div>
 </body>
 </html>
 <?php

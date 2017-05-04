@@ -4,28 +4,22 @@
 
 <?php
 //if subject isnt found then redirect
-$current_subject = findSubjectByID($_GET['subject']);
-if (!$current_subject) {
-	$_SESSION["message"] = "Deletion error (Subject not found).";
+$current_page = findPageByID($_GET['page']);
+if (!$current_page) {
+	$_SESSION["message"] = "Deletion error (Page not found).";
 	redirect('manage_content.php');
 }
 
-$pages_set = findPages($current_subject['id']);
-if (mysqli_num_rows($pages_set) > 0) {
-	$_SESSION["message"] = "Please remove all pages first before deleting a subject.";
-	redirect("manage_content.php?subject={$current_subject['id']}");
-
-}
-$query = "DELETE FROM subjects where id={$current_subject['id']} LIMIT 1";
+$query = "DELETE FROM pages where id={$current_page['id']} LIMIT 1";
 $result = mysqli_query($mysqli, $query);
 
 if ($result && mysqli_affected_rows($mysqli) == 1) {
 	//success
-	$_SESSION["message"] = "Subject deleted.";
+	$_SESSION["message"] = "Page deleted.";
 	redirect("manage_content.php");
 } else {
 	//fail
-	$_SESSION["message"] = "Subject deletion failed.";
-	redirect("manage_content.php?subject={$current_subject['id']}");
+	$_SESSION["message"] = "Page deletion failed.";
+	redirect("manage_content.php?subject={$current_page['id']}");
 }
 ?>
