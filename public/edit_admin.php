@@ -2,6 +2,7 @@
 <?php require_once "../includes/db_connection.php";?>
 <?php require_once "../includes/functions.php";?>
 <?php require_once "../includes/validations.php";?>
+<?php confirmLogin();?>
 
 <?php
 $admin = findAdminByID($_GET["id"]);
@@ -23,7 +24,7 @@ if (isset($_POST["submit"])) {
 	if (empty($errors)) {
 		$id = $_GET["id"];
 		$username = mysqli_real_escape_string($mysqli, $_POST["username"]);
-		$password = mysqli_real_escape_string($mysqli, $_POST["password"]);
+		$password = passwordEncrypt($_POST["password"]);
 
 		$query = "UPDATE admins SET username = '{$username}',
 									password = '{$password}'
@@ -63,7 +64,7 @@ if (isset($_POST["submit"])) {
 			</p>
 			<p>New Password:&nbsp;&nbsp;<input type="password" name="password" value="">
 			</p>
-			<input type="submit" name="submit" value="Edit Subject">
+			<input type="submit" name="submit" value="Edit Admin">
 			</form>
 			<br>
 			<a href="manage_admins.php" style="text-decoration:none">Cancel</a>

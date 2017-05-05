@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2017 at 02:53 AM
+-- Generation Time: May 05, 2017 at 08:40 PM
 -- Server version: 5.7.14
 -- PHP Version: 7.0.10
 
@@ -37,7 +37,8 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `username`, `password`) VALUES
-(1, 'jazzyguo', 'password');
+(1, 'jazzyguo', '$2y$10$MGJlNmIyZTY4NmFhYjJjZO5greI1zAU7kzG3XqzwBRbfhhvDaVIyK'),
+(11, 'admin', '$2y$10$MzBjOGQ2ZDIyNzlkYjEwYuEZH4i/EdeK.Qx.GCpvaaiydCnfFZ3t2');
 
 -- --------------------------------------------------------
 
@@ -59,10 +60,11 @@ CREATE TABLE `pages` (
 --
 
 INSERT INTO `pages` (`id`, `subject_id`, `menu_name`, `position`, `visible`, `content`) VALUES
-(1, 1, 'About me', 2, 1, '																								I am Jazzy Guo, a student looking to enhance my web development skills.																								'),
-(2, 1, 'My Mission', 1, 1, '								To learn PHP and MySQL through the making of this project.								'),
-(3, 2, 'Stony Brook University', 1, 1, 'Undergraduate Degree.'),
-(4, 3, 'Email Me', 1, 1, '								Jazzy.Guo@StonyBrook.edu								');
+(1, 1, 'About me', 2, 1, 'I am Jazzy Guo, a student looking to enhance my web development skills.																												'),
+(2, 1, 'My Mission', 1, 1, 'To learn PHP and MySQL through the making of this project.												'),
+(3, 2, 'Stony Brook University', 1, 1, 'Undergraduate Degree.				'),
+(4, 3, 'Email Me', 1, 1, 'Jazzy.Guo@StonyBrook.edu																							'),
+(11, 1, 'test', 3, 0, 'This page shouldn\'t be visible from the public side.												');
 
 -- --------------------------------------------------------
 
@@ -118,12 +120,12 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `subjects`
 --

@@ -51,6 +51,18 @@ function findAdminByID($admin_id) {
 	}
 }
 
+function findAdminByUsername($username) {
+	global $mysqli;
+	$username = mysqli_real_escape_string($mysqli, $username);
+	$query = "SELECT * FROM admins WHERE username = '{$username}' LIMIT 1";
+	$admin_set = mysqli_query($mysqli, $query);
+	confirmQuery($admin_set);
+	if ($admin = mysqli_fetch_assoc($admin_set)) {
+		return $admin;
+	} else {
+		return null;
+	}
+}
 //Gets all subjects
 function findAllSubjects($public = true) {
 	global $mysqli;
@@ -160,8 +172,6 @@ function navigation($selected_subject, $selected_page, $public = true) {
 					$output .= "</a>";
 					$output .= "</li>";
 				}
-				//free results
-				mysqli_free_result($page_set);
 				$output .= "</ul></li>";
 			}
 			//else show all pages if admin
@@ -182,11 +192,11 @@ function navigation($selected_subject, $selected_page, $public = true) {
 				$output .= "</a>";
 				$output .= "</li>";
 			}
-			//free results
-			mysqli_free_result($page_set);
 			$output .= "</ul></li>";
 		}
 	}
+	//free results
+	mysqli_free_result($page_set);
 	mysqli_free_result($subject_set);
 	$output .= "</ul>";
 	return $output;
@@ -212,5 +222,61 @@ function getCurrentPage($public = false) {
 	} else {
 		$current_subject = null;
 		$current_page = null;
+	}
+}
+//encrypts a salted password using blowfish
+function passwordEncrypt($password) {
+	$hash_format = "$2y$10$"; //blowfish - run 10 times
+	$salt = generateSalt(22); //22 chars or more for blowfish salt length
+	$format_and_salt = $hash_format . $salt;
+	$hash = crypt($password, $format_and_salt);
+	return $hash;
+}
+
+//generates a 22 char salt used for blowfish
+function generateSalt($length) {
+	//MD5 returns 32 characters
+	$unique_random_string = md5(uniqid(mt_rand(), true));
+	//Valid salt characters [a-zA-Z0-9./] but not +
+	$base_64_string = str_replace('+', '.', base64_encode($unique_random_string));
+	//return the first 22 chars to use for blowfish salt
+	$salt = substr($base_64_string, 0, $length);
+	return $salt;
+}
+
+//authenticates password using the existing hash
+//which consists of the format and salt
+function checkPassword($password, $existing_hash) {
+	$hash = crypt($password, $existing_hash);
+	if ($hash === $existing_hash) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function attemptLogin($username, $password) {
+	//find if inputed username returns an admin in database
+	$admin = findAdminByUsername($username);
+	//if found, check if inputed password matches hashed password
+	//in database
+	if ($admin) {
+		//returns admin if sucessful login
+		//returns false is password does not match
+		if (checkPassword($password, $admin["password"])) {
+			return $admin;
+		} else {
+			return false;
+		}
+	} else {
+		//admin username not found
+		return false;
+	}
+}
+
+//confirms if user is logged in
+function confirmLogin() {
+	if (!isset($_SESSION["admin_id"])) {
+		redirect("login.php");
 	}
 }

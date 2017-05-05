@@ -2,6 +2,7 @@
 <?php require_once "../includes/db_connection.php";?>
 <?php require_once "../includes/functions.php";?>
 <?php require_once "../includes/validations.php";?>
+<?php confirmLogin();?>
 <?php $layout_context = "admin";?>
 <?php include "../includes/layouts/header.php";?>
 
@@ -9,7 +10,7 @@
 if (isset($_POST["submit"])) {
 	//creates new subject page
 	$username = mysqli_real_escape_string($mysqli, $_POST["username"]);
-	$password = mysqli_real_escape_string($mysqli, $_POST["password"]);
+	$password = passwordEncrypt($_POST["password"]);
 
 	//validations
 	$required_fields = array('username', 'password');
