@@ -1,12 +1,13 @@
 <?php require_once "../includes/session.php";?>
 <?php require_once "../includes/db_connection.php";?>
 <?php require_once "../includes/functions.php";?>
+<?php $layout_context = "admin";?>
 <?php include "../includes/layouts/header.php";?>
 
 <?php getCurrentPage();?>
 <div id = "main">
 	<div id = "navigation">
-	<?php echo navigation($current_subject, $current_page); ?>
+	<?php echo navigation($current_subject, $current_page, false); ?>
 	</div>
 		<div id = "page">
 		<?php echo message(); ?>
@@ -19,7 +20,7 @@
 			</p>
 			<p>Position:
 				<select name="position">
-			<?php $subject_set = findAllSubjects();?>
+			<?php $subject_set = findAllSubjects(false);?>
 			<?php $subject_count = mysqli_num_rows($subject_set);?>
 			<?php for ($count = 1; $count <= $subject_count + 1; $count++) {?>
 			<?php echo "<option value=\"{$count}\">{$count}</option>"; ?>

@@ -1,6 +1,7 @@
 <?php require_once "../includes/session.php";?>
 <?php require_once "../includes/db_connection.php";?>
 <?php require_once "../includes/functions.php";?>
+<?php $layout_context = "admin";?>
 <?php include "../includes/layouts/header.php";?>
 
 <?php getCurrentPage();?>
@@ -8,7 +9,7 @@
 	<div id = "navigation">
 	<br>
 	<a href="admin.php">&laquo; Main Menu</a>
-	<?php echo navigation($current_subject, $current_page); ?>
+	<?php echo navigation($current_subject, $current_page, false); ?>
 	<br>
 	<a href="add_subject.php">+ Add a Subject</a>
 	</div>
@@ -24,9 +25,9 @@
 				<hr>
 				<h3>Pages Associated with this subject: </h3>
 				<ul class = "pages">
-				<?php $page_set = findPages($current_subject["id"]);?>
+				<?php $page_set = findPages($current_subject["id"], false);?>
 				<?php while ($page = mysqli_fetch_assoc($page_set)) {?>
-				<li> <?php echo htmlentities($page['menu_name']); ?> </li>
+				<li> <a href ="manage_content.php?page=<?php echo $page["id"]; ?>"><?php echo htmlentities($page['menu_name']); ?></a></li>
 				<?php }?>
 				</ul>
 				<a href="new_page.php?subject=<?php echo urlencode($current_subject['id']); ?>">+ Add a new Page</a>
@@ -42,8 +43,8 @@
 				</div>
 				<a href="edit_page.php?page=<?php echo urlencode($current_page["id"]); ?>">Edit Page</a>
 			<?php } else {?>
-				<br>
-				<?php echo "Please select a page.."; ?>
+				<h1>Welcome!</h1>
+				<p>Please Select a page.</p>
 			<?php }?>
 		</div>
 	</div>

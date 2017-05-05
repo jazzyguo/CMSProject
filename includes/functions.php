@@ -29,9 +29,13 @@ function error_message($errors) {
 	return $output;
 }
 //Gets all subjects
-function findAllSubjects() {
+function findAllSubjects($public = true) {
 	global $mysqli;
-	$query = "SELECT * FROM subjects WHERE visible = 1 ORDER BY position asc";
+	$query = "SELECT * FROM subjects ";
+	if ($public) {
+		$query .= "WHERE visible = 1 ";
+	}
+	$query .= "ORDER BY position asc";
 	$subject_set = mysqli_query($mysqli, $query);
 	confirmQuery($subject_set);
 	return $subject_set;
@@ -39,40 +43,64 @@ function findAllSubjects() {
 }
 
 //Gets pages using subject_id
-function findPages($subject_id) {
+function findPages($subject_id, $public = true) {
 	global $mysqli;
 	$subject_id = mysqli_real_escape_string($mysqli, $subject_id);
-	$query = "SELECT * FROM pages WHERE visible = 1 AND subject_id = {$subject_id} ORDER BY position asc";
+	$query = "SELECT * FROM pages WHERE subject_id = {$subject_id} ";
+	if ($public) {
+		$query .= "AND visible = 1 ";
+	}
+	$query .= "ORDER BY position asc";
 	$page_set = mysqli_query($mysqli, $query);
 	confirmQuery($page_set);
 	return $page_set;
 }
 
-function findSubjectByID($subject_id) {
+function findSubjectByID($subject_id, $public = true) {
 	global $mysqli;
 	$subject_id = mysqli_real_escape_string($mysqli, $subject_id);
-	$query = "SELECT * FROM subjects WHERE id = {$subject_id}";
+	$query = "SELECT * FROM subjects WHERE id = {$subject_id} ";
+	if ($public) {
+		$query .= " AND visible = 1";
+	}
 	$subject_set = mysqli_query($mysqli, $query);
 	confirmQuery($subject_set);
-	$subject = mysqli_fetch_assoc($subject_set);
-	return $subject;
+	if ($subject = mysqli_fetch_assoc($subject_set)) {
+		return $subject;
+	} else {
+		return null;
+	}
 }
 
-function findPageByID($page_id) {
+function findPageByID($page_id, $public = true) {
 	global $mysqli;
 	$page_id = mysqli_real_escape_string($mysqli, $page_id);
 	$query = "SELECT * FROM pages WHERE id = {$page_id}";
+	if ($public) {
+		$query .= " AND visible = 1";
+	}
 	$page_set = mysqli_query($mysqli, $query);
 	confirmQuery($page_set);
-	$page = mysqli_fetch_assoc($page_set);
-	return $page;
+	if ($page = mysqli_fetch_assoc($page_set)) {
+		return $page;
+	} else {
+		return null;
+	}
 }
 
-//returns list of subjects with corresponding pages
-function navigation($selected_subject, $selected_page) {
+//gets a default (first) page based on subject id
+function findDefaultPage($subject_id) {
+	$page_set = findPages($subject_id);
+	if ($page = mysqli_fetch_assoc($page_set)) {
+		return $page;
+	} else {
+		return null;
+	}
+}
+//returns list of subjects with corresponding pages(all if $public = false)
+function navigation($selected_subject, $selected_page, $public = true) {
 	$output = "<ul class=\"subjects\">";
-
-	$subject_set = findAllSubjects();
+	$subject_set = findAllSubjects($public);
 	//while a subject exists
 	while ($subject = mysqli_fetch_assoc($subject_set)) {
 		$output .= "<li";
@@ -81,32 +109,61 @@ function navigation($selected_subject, $selected_page) {
 			$output .= " class=\"selected\"";
 		}
 		$output .= ">";
-		$output .= "<a href=\"manage_content.php?subject=";
+		if ($public) {
+			$output .= "<a href=\"index.php?subject=";
+		} else {
+			$output .= "<a href=\"manage_content.php?subject=";
+		}
 		$output .= urlencode($subject["id"]);
 		$output .= "\">";
 		$output .= htmlentities($subject["menu_name"]);
 		$output .= "</a>";
-
-		$page_set = findPages($subject["id"]);
-		$output .= "<ul class=\"pages\">";
-		//gets pages of subject
-		while ($page = mysqli_fetch_assoc($page_set)) {
-			$output .= "<li";
-			//highlights selected page
-			if ($selected_page["id"] == $page["id"]) {
-				$output .= " class=\"selected\"";
+		$page_set = findPages($subject["id"], $public);
+		//if not admin, only show visible pages
+		if ($public) {
+			if ($selected_subject["id"] == $subject["id"] || $selected_page["subject_id"] == $subject["id"]) {
+				$output .= "<ul class=\"pages\">";
+				//gets pages of subject
+				while ($page = mysqli_fetch_assoc($page_set)) {
+					$output .= "<li";
+					//highlights selected page
+					if ($selected_page["id"] == $page["id"]) {
+						$output .= " class=\"selected\"";
+					}
+					$output .= ">";
+					$output .= "<a href=\"index.php?page=";
+					$output .= urlencode($page["id"]);
+					$output .= "\">";
+					$output .= htmlentities($page["menu_name"]);
+					$output .= "</a>";
+					$output .= "</li>";
+				}
+				//free results
+				mysqli_free_result($page_set);
+				$output .= "</ul></li>";
 			}
-			$output .= ">";
-			$output .= "<a href=\"manage_content.php?page=";
-			$output .= urlencode($page["id"]);
-			$output .= "\">";
-			$output .= htmlentities($page["menu_name"]);
-			$output .= "</a>";
-			$output .= "</li>";
+			//else show all pages if admin
+		} else {
+			$output .= "<ul class=\"pages\">";
+			//gets pages of subject
+			while ($page = mysqli_fetch_assoc($page_set)) {
+				$output .= "<li";
+				//highlights selected page
+				if ($selected_page["id"] == $page["id"]) {
+					$output .= " class=\"selected\"";
+				}
+				$output .= ">";
+				$output .= "<a href=\"manage_content.php?page=";
+				$output .= urlencode($page["id"]);
+				$output .= "\">";
+				$output .= htmlentities($page["menu_name"]);
+				$output .= "</a>";
+				$output .= "</li>";
+			}
+			//free results
+			mysqli_free_result($page_set);
+			$output .= "</ul></li>";
 		}
-		//free results
-		mysqli_free_result($page_set);
-		$output .= "</ul></li>";
 	}
 	mysqli_free_result($subject_set);
 	$output .= "</ul>";
@@ -114,15 +171,22 @@ function navigation($selected_subject, $selected_page) {
 }
 
 //Gets the current page the user is on
-function getCurrentPage() {
+function getCurrentPage($public = false) {
 	global $current_subject;
 	global $current_page;
+	//if subject is set and public, set default page to first page
 	if (isset($_GET["subject"])) {
-		$current_subject = findSubjectByID($_GET["subject"]);
-		$current_page = null;
+		$current_subject = findSubjectByID($_GET["subject"], $public);
+		//if current subject is set
+		if ($current_subject && $public) {
+			$current_page = findDefaultPage($current_subject["id"]);
+		} else {
+			$current_page = null;
+		}
+		//gets page for admin
 	} elseif (isset($_GET["page"])) {
 		$current_subject = null;
-		$current_page = findPageByID($_GET["page"]);
+		$current_page = findPageByID($_GET["page"], $public);
 	} else {
 		$current_subject = null;
 		$current_page = null;

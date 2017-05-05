@@ -28,7 +28,7 @@ if (isset($_POST["submit"])) {
 		$menu_name = mysqli_real_escape_string($mysqli, $_POST["menu_name"]);
 		$position = (int) $_POST["position"];
 		$visible = (int) $_POST["visible"];
-		$content = $_POST["content"];
+		$content = mysqli_real_escape_string($mysqli, $_POST["content"]);
 
 		$query = "UPDATE pages SET menu_name = '{$menu_name}',
 									  position = {$position},
@@ -52,12 +52,12 @@ if (isset($_POST["submit"])) {
 }
 
 ?>
-
+<?php $layout_context = "admin";?>
 <?php include "../includes/layouts/header.php";?>
 
 <div id = "main">
 	<div id = "navigation">
-	<?php echo navigation($current_subject, $current_page); ?>
+	<?php echo navigation($current_subject, $current_page, false); ?>
 	<br>
 	<a href="add_subject.php">+ Add a Subject</a>
 	</div>
@@ -72,7 +72,7 @@ if (isset($_POST["submit"])) {
 			</p>
 			<p>Position:
 				<select name="position">
-			<?php $page_set = findPages($current_page['subject_id']);?>
+			<?php $page_set = findPages($current_page['subject_id'], false);?>
 			<?php $page_count = mysqli_num_rows($page_set);?>
 			<?php for ($count = 1; $count <= $page_count; $count++) {?>
 			<?php echo "<option value=\"{$count}\" "; ?>

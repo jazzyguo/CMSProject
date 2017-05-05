@@ -50,12 +50,12 @@ if (isset($_POST["submit"])) {
 }
 
 ?>
-
+<?php $layout_context = "admin";?>
 <?php include "../includes/layouts/header.php";?>
 
 <div id = "main">
 	<div id = "navigation">
-	<?php echo navigation($current_subject, $current_page); ?>
+	<?php echo navigation($current_subject, $current_page, false); ?>
 	<br>
 	<a href="add_subject.php">+ Add a Subject</a>
 	</div>
@@ -70,7 +70,7 @@ if (isset($_POST["submit"])) {
 			</p>
 			<p>Position:
 				<select name="position">
-			<?php $subject_set = findAllSubjects();?>
+			<?php $subject_set = findAllSubjects(false);?>
 			<?php $subject_count = mysqli_num_rows($subject_set);?>
 			<?php for ($count = 1; $count <= $subject_count; $count++) {?>
 				<?php echo "<option value=\"{$count}\" "; ?>

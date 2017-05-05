@@ -4,7 +4,7 @@
 
 <?php
 //if subject isnt found then redirect
-$current_page = findPageByID($_GET['page']);
+$current_page = findPageByID($_GET['page'], false);
 if (!$current_page) {
 	$_SESSION["message"] = "Deletion error (Page not found).";
 	redirect('manage_content.php');

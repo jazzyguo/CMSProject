@@ -2,6 +2,7 @@
 <?php require_once "../includes/db_connection.php";?>
 <?php require_once "../includes/functions.php";?>
 <?php require_once "../includes/validations.php";?>
+<?php $layout_context = "admin";?>
 <?php include "../includes/layouts/header.php";?>
 
 <?php getCurrentPage();?>
@@ -12,7 +13,7 @@ if (isset($_POST["submit"])) {
 	$menu_name = mysqli_real_escape_string($mysqli, $_POST["menu_name"]);
 	$position = (int) $_POST["position"];
 	$visible = (int) $_POST["visible"];
-	$content = $_POST["content"];
+	$content = mysqli_real_escape_string($mysqli, $_POST["content"]);
 
 	//validations
 	$required_fields = array('menu_name', 'position', 'visible', 'content');
@@ -44,7 +45,7 @@ if (isset($_POST["submit"])) {
 
 <div id = "main">
 	<div id = "navigation">
-	<?php echo navigation($current_subject, $current_page); ?>
+	<?php echo navigation($current_subject, $current_page, false); ?>
 	<br>
 	<a href="add_subject.php">+ Add a Subject</a>
 	</div>
@@ -59,7 +60,7 @@ if (isset($_POST["submit"])) {
 			</p>
 			<p>Position:
 				<select name="position">
-			<?php $page_set = findPages($current_subject['id']);?>
+			<?php $page_set = findPages($current_subject['id'], true);?>
 			<?php $page_count = mysqli_num_rows($page_set);?>
 			<?php for ($count = 1; $count <= $page_count + 1; $count++) {?>
 			<?php echo "<option value=\"{$count}\">{$count}</option>"; ?>

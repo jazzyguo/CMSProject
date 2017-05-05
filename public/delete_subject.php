@@ -4,13 +4,13 @@
 
 <?php
 //if subject isnt found then redirect
-$current_subject = findSubjectByID($_GET['subject']);
+$current_subject = findSubjectByID($_GET['subject'], false);
 if (!$current_subject) {
 	$_SESSION["message"] = "Deletion error (Subject not found).";
 	redirect('manage_content.php');
 }
 
-$pages_set = findPages($current_subject['id']);
+$pages_set = findPages($current_subject['id'], false);
 if (mysqli_num_rows($pages_set) > 0) {
 	$_SESSION["message"] = "Please remove all pages first before deleting a subject.";
 	redirect("manage_content.php?subject={$current_subject['id']}");

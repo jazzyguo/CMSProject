@@ -124,6 +124,11 @@ li:last-child {
     background: #EEE4B9;
 }
 
+#page h1 {
+    color: #8D0D19;
+    margin-top: 1em;
+}
+
 #page h2 {
     color: #8D0D19;
     margin-top: 1em;
