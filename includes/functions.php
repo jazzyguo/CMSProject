@@ -28,6 +28,29 @@ function error_message($errors) {
 	}
 	return $output;
 }
+
+//gets all admins
+function findAllAdmins() {
+	global $mysqli;
+	$query = "SELECT * FROM admins";
+	$admin_set = mysqli_query($mysqli, $query);
+	confirmQuery($admin_set);
+	return $admin_set;
+}
+
+function findAdminByID($admin_id) {
+	global $mysqli;
+	$admin_id = mysqli_real_escape_string($mysqli, $admin_id);
+	$query = "SELECT * FROM admins WHERE id = {$admin_id}";
+	$admin_set = mysqli_query($mysqli, $query);
+	confirmQuery($admin_set);
+	if ($admin = mysqli_fetch_assoc($admin_set)) {
+		return $admin;
+	} else {
+		return null;
+	}
+}
+
 //Gets all subjects
 function findAllSubjects($public = true) {
 	global $mysqli;
@@ -39,7 +62,6 @@ function findAllSubjects($public = true) {
 	$subject_set = mysqli_query($mysqli, $query);
 	confirmQuery($subject_set);
 	return $subject_set;
-
 }
 
 //Gets pages using subject_id

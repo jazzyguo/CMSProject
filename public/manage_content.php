@@ -19,7 +19,8 @@
 				<h2>Manage Subject</h2>
 				Menu Name: <?php echo htmlentities($current_subject["menu_name"]) . "<br>"; ?>
 				Position: <?php echo $current_subject["position"] . "<br>"; ?>
-				Visible: <?php echo $current_subject["visible"] == 1 ? 'Yes' : 'No' . "<br>"; ?> <br>
+				Visible: <?php echo $current_subject["visible"] == 1 ? 'Yes' : 'No' . "<br>"; ?>
+				<br><br>
 				<a href="edit_subject.php?subject=<?php echo urlencode($current_subject["id"]); ?>">Edit Subject</a>
 				<br>
 				<hr>
@@ -30,7 +31,7 @@
 				<li> <a href ="manage_content.php?page=<?php echo $page["id"]; ?>"><?php echo htmlentities($page['menu_name']); ?></a></li>
 				<?php }?>
 				</ul>
-				<a href="new_page.php?subject=<?php echo urlencode($current_subject['id']); ?>">+ Add a new Page</a>
+				<a href="new_page.php?subject=<?php echo urlencode($current_subject['id']); ?>" style="text-decoration:none">+ Add a new Page</a>
 
 			<?php } elseif ($current_page) {?>
 				<h2>Manage Page</h2>
