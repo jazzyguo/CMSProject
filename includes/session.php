@@ -2,6 +2,7 @@
 //CREATE SESSION
 session_start();
 
+//displays the session message, then clears
 function message() {
 	if (isset($_SESSION["message"])) {
 		$output = "<div class=\"message\">";
@@ -12,6 +13,7 @@ function message() {
 	}
 }
 
+//displays session errors, then clears
 function errors() {
 	if (isset($_SESSION["errors"])) {
 		$output = ($_SESSION["errors"]);

@@ -17,6 +17,7 @@
 			<?php $errors = errors();?>
 			<?php echo error_message($errors); ?>
 			<h2>Manage Admins</h2>
+			<?php //provides the table for managing admins?>
 			<table>
 				<tr>
 					<th style="text-align:left; width:200px">Username</th>

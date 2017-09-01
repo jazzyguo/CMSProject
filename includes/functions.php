@@ -6,11 +6,13 @@ function confirmQuery($result_set) {
 	}
 }
 
+//redirects to a new page
 function redirect($new_location) {
 	header("Location: " . $new_location);
 	exit;
 }
 
+//shows error messages
 function error_message($errors) {
 	$output = "";
 	if (!empty($errors)) {
@@ -38,6 +40,7 @@ function findAllAdmins() {
 	return $admin_set;
 }
 
+//finds an admin using the given id
 function findAdminByID($admin_id) {
 	global $mysqli;
 	$admin_id = mysqli_real_escape_string($mysqli, $admin_id);
@@ -51,6 +54,7 @@ function findAdminByID($admin_id) {
 	}
 }
 
+//finds an admin using the given username
 function findAdminByUsername($username) {
 	global $mysqli;
 	$username = mysqli_real_escape_string($mysqli, $username);
@@ -90,6 +94,7 @@ function findPages($subject_id, $public = true) {
 	return $page_set;
 }
 
+//finds a subject using the given id, default visibility
 function findSubjectByID($subject_id, $public = true) {
 	global $mysqli;
 	$subject_id = mysqli_real_escape_string($mysqli, $subject_id);
@@ -106,6 +111,7 @@ function findSubjectByID($subject_id, $public = true) {
 	}
 }
 
+//finds a page using the given id, default visibility
 function findPageByID($page_id, $public = true) {
 	global $mysqli;
 	$page_id = mysqli_real_escape_string($mysqli, $page_id);

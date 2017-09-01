@@ -5,9 +5,11 @@
 <?php include "../includes/layouts/header.php";?>
 
 <?php getCurrentPage();?>
+
 <div id = "main">
 	<div id = "navigation">
-	<?php echo navigation($current_subject, $current_page, false); ?>
+	<?php //displays the navigation
+echo navigation($current_subject, $current_page, false); ?>
 	</div>
 		<div id = "page">
 		<?php echo message(); ?>
@@ -20,7 +22,8 @@
 			</p>
 			<p>Position:
 				<select name="position">
-			<?php $subject_set = findAllSubjects(false);?>
+			<?php //retrieves the number of subjects for the position number options
+$subject_set = findAllSubjects(false);?>
 			<?php $subject_count = mysqli_num_rows($subject_set);?>
 			<?php for ($count = 1; $count <= $subject_count + 1; $count++) {?>
 			<?php echo "<option value=\"{$count}\">{$count}</option>"; ?>

@@ -6,6 +6,7 @@
 <?php include "../includes/layouts/header.php";?>
 
 <?php getCurrentPage();?>
+<?php //displays the current page or subject and information to edit?>
 <div id = "main">
 	<div id = "navigation">
 	<br>
@@ -16,6 +17,7 @@
 	</div>
 		<div id = "page">
 			<?php echo message(); ?>
+			<?php //if on a subject - displays information about current subject, and all relevant pages?>
 			<?php if ($current_subject) {?>
 				<h2>Manage Subject</h2>
 				Menu Name: <?php echo htmlentities($current_subject["menu_name"]) . "<br>"; ?>
@@ -25,6 +27,7 @@
 				<a href="edit_subject.php?subject=<?php echo urlencode($current_subject["id"]); ?>">Edit Subject</a>
 				<br>
 				<hr>
+				<?php //retrieves all pages associated with the current subject?>
 				<h3>Pages Associated with this subject: </h3>
 				<ul class = "pages">
 				<?php $page_set = findPages($current_subject["id"], false);?>
@@ -33,7 +36,7 @@
 				<?php }?>
 				</ul>
 				<a href="new_page.php?subject=<?php echo urlencode($current_subject['id']); ?>" style="text-decoration:none">+ Add a new Page</a>
-
+			<?php //else if on a page, displays the page information?>
 			<?php } elseif ($current_page) {?>
 				<h2>Manage Page</h2>
 				Menu Name: <?php echo htmlentities($current_page["menu_name"]) . "<br>"; ?>
